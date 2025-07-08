@@ -114,6 +114,8 @@ if (length(lista_dfs) > 0) {
 }
 View(df_listo)
 
+# tuvimos un problema con unos valores en la fecha 17/12/24, por lo que lo
+# corregimos de la siguiente manera
 # Vector con las monedas que queremos corregir
 monedas_con_error <- c("BRL", "COP")
 
