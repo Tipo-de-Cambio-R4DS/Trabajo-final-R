@@ -336,7 +336,7 @@ if (ult_cny > penu_cny) {
 df_eur %>%
   arrange(desc(Fecha)) %>%     # Como queremos es un DT con datos del mas reciente al mas antiguo
   head(30) %>%                 # aplicamos arrange y despues identificamos que solo queremos los
-  datatable(options = list(    # primeros 10
+  datatable(options = list(    # primeros 30
     autoWidth = TRUE,
     pageLength = 30
   ))
@@ -348,7 +348,7 @@ df_eur %>%
 df_usd %>%
   arrange(desc(Fecha)) %>%     # Como queremos es un DT con datos del mas reciente al mas antiguo
   head(30) %>%                 # aplicamos arrange y despues identificamos que solo queremos los
-  datatable(options = list(    # primeros 10
+  datatable(options = list(    # primeros 30
     autoWidth = TRUE,
     pageLength = 30
   ))
@@ -361,7 +361,7 @@ df_usd %>%
 df_cop %>%
   arrange(desc(Fecha)) %>%     # Como queremos es un DT con datos del mas reciente al mas antiguo
   head(30) %>%                 # aplicamos arrange y despues identificamos que solo queremos los
-  datatable(options = list(    # primeros 10
+  datatable(options = list(    # primeros 30
     autoWidth = TRUE,
     pageLength = 30
   ))
@@ -374,7 +374,7 @@ df_cop %>%
 df_brl %>%
   arrange(desc(Fecha)) %>%     # Como queremos es un DT con datos del mas reciente al mas antiguo
   head(30) %>%                 # aplicamos arrange y despues identificamos que solo queremos los
-  datatable(options = list(    # primeros 10
+  datatable(options = list(    # primeros 30
     autoWidth = TRUE,
     pageLength = 30
   ))
@@ -387,7 +387,7 @@ df_brl %>%
 df_cny %>%
   arrange(desc(Fecha)) %>%     # Como queremos es un DT con datos del mas reciente al mas antiguo
   head(30) %>%                 # aplicamos arrange y despues identificamos que solo queremos los
-  datatable(options = list(    # primeros 10
+  datatable(options = list(    # primeros 30
     autoWidth = TRUE,
     pageLength = 30
   ))
