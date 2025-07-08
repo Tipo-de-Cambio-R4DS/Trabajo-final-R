@@ -1,0 +1,674 @@
+---
+title: "TASA DE CAMBIO OFICIAL DE VENEZUELA"
+format: 
+  dashboard:
+    logo: https://flagcdn.com/w320/ve.png
+    nav-buttons: [icon: github, href: "https://github.com/Tipo-de-Cambio-R4DS/Trabajo-final-R"]
+page-navigation: tabs
+---
+# Indicadores Principales
+```{r}
+# Cargar librerias
+
+library(shiny)
+library(shinydashboard)
+library(rvest)
+library(readxl)    
+library(tidyverse)
+library(dplyr)
+library(plotly)
+library(DT)
+
+```
+
+```{r}
+load('datos_monedas.RData')
+```
+
+
+```{r}
+
+# OPERACIONES PARA LOS CRITERIOS DE LOS VALUEBOX 
+
+  #penultimos valores de cada moneda
+
+penu_eur <- df_eur[nrow(df_eur)-1, 'Compra_Bs']
+penu_usd <- df_usd[nrow(df_usd)-1, 'Compra_Bs']
+penu_cop <- df_cop[nrow(df_cop)-1, 'Compra_Bs']
+penu_brl <- df_brl[nrow(df_brl)-1, 'Compra_Bs']
+penu_cny <- df_cny[nrow(df_cny)-1, 'Compra_Bs']
+
+  #ultimos valores de cada moneda
+  
+ult_eur <- df_eur[nrow(df_eur), 'Compra_Bs']
+ult_usd <- df_usd[nrow(df_usd), 'Compra_Bs']
+ult_cop <- df_cop[nrow(df_cop), 'Compra_Bs']
+ult_brl <- df_brl[nrow(df_brl), 'Compra_Bs']
+ult_cny <- df_cny[nrow(df_cny), 'Compra_Bs']
+
+```
+
+## Row {height=30%}
+
+### Column
+
+```{r}
+
+if (ult_eur > penu_eur) {
+  valueBox(
+    value = HTML(paste0(
+      '<div style="display: flex; align-items: center; justify-content: center; gap: 10px;">',
+        '<div style="display: flex; align-items: center;">',
+          '<img src="https://flagcdn.com/w40/eu.png" width="30" height="24" style="margin-right: 6px;" />',
+          '<span style="font-weight: bold; font-size: 13px;">EUR</span>',
+        '</div>',
+        '<div style="font-size: 20px; font-weight: bold;">€ ', round(ult_eur, 2), '</div>',
+        '<i class="fa fa-arrow-up" style="font-size: 20px; font-weight: bold; color: white; position: relative; top: -8px;"></i>',
+      '</div>'
+    )),
+    subtitle = NULL,
+    color = "green"
+  )
+} else if (ult_eur == penu_eur) {
+  valueBox(
+    value = HTML(paste0(
+      '<div style="display: flex; align-items: center; justify-content: center; gap: 10px;">',
+        '<div style="display: flex; align-items: center;">',
+          '<img src="https://flagcdn.com/w40/eu.png" width="30" height="24" style="margin-right: 6px;" />',
+          '<span style="font-weight: bold; font-size: 13px;">EUR</span>',
+        '</div>',
+        '<div style="font-size: 20px; font-weight: bold;">€ ', round(ult_eur, 2), '</div>',
+        '<i class="fa fa-equals" style="font-size: 20px; color: white; position: relative; top: -8px;"></i>',
+      '</div>'
+    )),
+    subtitle = NULL,
+    color = "grey"
+  )
+} else {
+  valueBox(
+    value = HTML(paste0(
+      '<div style="display: flex; align-items: center; justify-content: center; gap: 10px;">',
+        '<div style="display: flex; align-items: center;">',
+          '<img src="https://flagcdn.com/w40/eu.png" width="30" height="24" style="margin-right: 6px;" />',
+          '<span style="font-weight: bold; font-size: 13px;">EUR</span>',
+        '</div>',
+        '<div style="font-size: 20px; font-weight: bold;">€ ', round(ult_eur, 2), '</div>',
+        '<i class="fa fa-arrow-down" style="font-size: 20px; font-weight: bold; color: white; position: relative; top: -8px;"></i>',
+      '</div>'
+    )),
+    subtitle = NULL,
+    color = "red"
+  )
+}
+
+
+```
+
+### Column
+
+```{r}
+
+if (ult_usd > penu_usd) {
+  valueBox(
+    value = HTML(paste0(
+      '<div style="display: flex; align-items: center; justify-content: center; gap: 10px;">',
+        '<div style="display: flex; align-items: center;">',
+          '<img src="https://flagcdn.com/w40/us.png" width="30" height="24" style="margin-right: 6px;" />',
+          '<span style="font-weight: bold; font-size: 13px;">USD</span>',
+        '</div>',
+        '<div style="font-size: 20px; font-weight: bold;">$ ', round(ult_usd, 2), '</div>',
+        '<i class="fa fa-arrow-up" style="font-size: 20px; font-weight: bold; color: white; position: relative; top: -8px;"></i>',
+      '</div>'
+    )),
+    subtitle = NULL,
+    color = "green"
+  )
+} else if (ult_usd == penu_usd) {
+  valueBox(
+    value = HTML(paste0(
+      '<div style="display: flex; align-items: center; justify-content: center; gap: 10px;">',
+        '<div style="display: flex; align-items: center;">',
+          '<img src="https://flagcdn.com/w40/us.png" width="30" height="24" style="margin-right: 6px;" />',
+          '<span style="font-weight: bold; font-size: 13px;">USD</span>',
+        '</div>',
+        '<div style="font-size: 20px; font-weight: bold;">$ ', round(ult_usd, 2), '</div>',
+        '<i class="fa fa-equals" style="font-size: 20px; color: white; position: relative; top: -8px;"></i>',
+      '</div>'
+    )),
+    subtitle = NULL,
+    color = "grey"
+  )
+} else {
+  valueBox(
+    value = HTML(paste0(
+      '<div style="display: flex; align-items: center; justify-content: center; gap: 10px;">',
+        '<div style="display: flex; align-items: center;">',
+          '<img src="https://flagcdn.com/w40/us.png" width="30" height="24" style="margin-right: 6px;" />',
+          '<span style="font-weight: bold; font-size: 13px;">USD</span>',
+        '</div>',
+        '<div style="font-size: 20px; font-weight: bold;">$ ', round(ult_usd, 2), '</div>',
+        '<i class="fa fa-arrow-down" style="font-size: 20px; font-weight: bold; color: white; position: relative; top: -8px;"></i>',
+      '</div>'
+    )),
+    subtitle = NULL,
+    color = "red"
+  )
+}
+
+```
+
+### Column
+
+```{r}
+
+if (ult_cop > penu_cop) {
+  valueBox(
+    value = HTML(
+      paste0(
+        '<div style="text-align: center;">',
+          '<div style="margin-bottom: 4px; display: inline-flex; align-items: center; justify-content: center;">',
+            '<img src="https://flagcdn.com/w40/co.png" width="30" height="24" style="margin-right: 6px;" />',
+            '<span style="font-weight: bold; font-size: 13px;">COP</span>',
+          '</div>',
+          '<div style="font-size: 20px; font-weight: bold;">$', round(ult_cop, 2), '</div>',
+          '<div style="margin-top: 4px;">',
+            '<i class="fa fa-arrow-up" style="font-size: 20px; font-weight: bold; color: white;"></i>',
+          '</div>',
+        '</div>'
+      )
+    ),
+    subtitle = NULL,
+    color = "green"
+  )
+} else if (ult_cop == penu_cop) {
+  valueBox(
+    value = HTML(
+      paste0(
+        '<div style="text-align: center;">',
+          '<div style="margin-bottom: 4px; display: inline-flex; align-items: center; justify-content: center;">',
+            '<img src="https://flagcdn.com/w40/co.png" width="30" height="24" style="margin-right: 6px;" />',
+            '<span style="font-weight: bold; font-size: 13px;">COP</span>',
+          '</div>',
+          '<div style="font-size: 20px; font-weight: bold;">$', round(ult_cop, 2), '</div>',
+          '<div style="margin-top: 4px;">',
+            '<i class="fa fa-equals" style="font-size: 18px; color: white;"></i>',
+          '</div>',
+        '</div>'
+      )
+    ),
+    subtitle = NULL,
+    color = "grey"
+  )
+} else {
+  valueBox(
+    value = HTML(
+      paste0(
+        '<div style="text-align: center;">',
+          '<div style="margin-bottom: 4px; display: inline-flex; align-items: center; justify-content: center;">',
+            '<img src="https://flagcdn.com/w40/co.png" width="30" height="24" style="margin-right: 6px;" />',
+            '<span style="font-weight: bold; font-size: 13px;">COP</span>',
+          '</div>',
+          '<div style="font-size: 20px; font-weight: bold;">$', round(ult_cop, 2), '</div>',
+          '<div style="margin-top: 4px;">',
+            '<i class="fa fa-arrow-down" style="font-size: 20px; font-weight: bold; color: white;"></i>',
+          '</div>',
+        '</div>'
+      )
+    ),
+    subtitle = NULL,
+    color = "red"
+  )
+}
+```
+
+### Column
+
+```{r}
+
+if (ult_brl > penu_brl) {
+  valueBox(
+    value = HTML(paste0(
+      '<div style="display: flex; align-items: center; justify-content: center; gap: 10px;">',
+        '<div style="display: flex; align-items: center;">',
+          '<img src="https://flagcdn.com/w40/br.png" width="30" height="24" style="margin-right: 6px;" />',
+          '<span style="font-weight: bold; font-size: 13px;">BRL</span>',
+        '</div>',
+        '<div style="font-size: 20px; font-weight: bold;">R$ ', round(ult_brl, 2), '</div>',
+        '<i class="fa fa-arrow-up" style="font-size: 20px; font-weight: bold; color: white; position: relative; top: -8px;"></i>',
+      '</div>'
+    )),
+    subtitle = NULL,
+    color = "green"
+  )
+} else if (ult_brl == penu_brl) {
+  valueBox(
+    value = HTML(paste0(
+      '<div style="display: flex; align-items: center; justify-content: center; gap: 10px;">',
+        '<div style="display: flex; align-items: center;">',
+          '<img src="https://flagcdn.com/w40/br.png" width="30" height="24" style="margin-right: 6px;" />',
+          '<span style="font-weight: bold; font-size: 13px;">BRL</span>',
+        '</div>',
+        '<div style="font-size: 20px; font-weight: bold;">R$ ', round(ult_brl, 2), '</div>',
+        '<i class="fa fa-equals" style="font-size: 20px; color: white; position: relative; top: -8px;"></i>',
+      '</div>'
+    )),
+    subtitle = NULL,
+    color = "grey"
+  )
+} else {
+  valueBox(
+    value = HTML(paste0(
+      '<div style="display: flex; align-items: center; justify-content: center; gap: 10px;">',
+        '<div style="display: flex; align-items: center;">',
+          '<img src="https://flagcdn.com/w40/br.png" width="30" height="24" style="margin-right: 6px;" />',
+          '<span style="font-weight: bold; font-size: 13px;">BRL</span>',
+        '</div>',
+        '<div style="font-size: 20px; font-weight: bold;">R$ ', round(ult_brl, 2), '</div>',
+        '<i class="fa fa-arrow-down" style="font-size: 20px; font-weight: bold; color: white; position: relative; top: -8px;"></i>',
+      '</div>'
+    )),
+    subtitle = NULL,
+    color = "red"
+  )
+}
+
+```
+
+### Column
+
+```{r}
+
+if (ult_cny > penu_cny) {
+  valueBox(
+    value = HTML(paste0(
+      '<div style="display: flex; align-items: center; justify-content: center; gap: 10px;">',
+        '<div style="display: flex; align-items: center;">',
+          '<img src="https://flagcdn.com/w40/cn.png" width="30" height="24" style="margin-right: 6px;" />',
+          '<span style="font-weight: bold; font-size: 13px;">CNY</span>',
+        '</div>',
+        '<div style="font-size: 20px; font-weight: bold;">¥ ', round(ult_cny, 2), '</div>',
+        '<i class="fa fa-arrow-up" style="font-size: 20px; font-weight: bold; color: white; position: relative; top: -8px;"></i>',
+      '</div>'
+    )),
+    subtitle = NULL,
+    color = "green"
+  )
+} else if (ult_cny == penu_cny) {
+  valueBox(
+    value = HTML(paste0(
+      '<div style="display: flex; align-items: center; justify-content: center; gap: 10px;">',
+        '<div style="display: flex; align-items: center;">',
+          '<img src="https://flagcdn.com/w40/cn.png" width="30" height="24" style="margin-right: 6px;" />',
+          '<span style="font-weight: bold; font-size: 13px;">CNY</span>',
+        '</div>',
+        '<div style="font-size: 20px; font-weight: bold;">¥ ', round(ult_cny, 2), '</div>',
+        '<i class="fa fa-equals" style="font-size: 20px; color: white; position: relative; top: -8px;"></i>',
+      '</div>'
+    )),
+    subtitle = NULL,
+    color = "grey"
+  )
+} else {
+  valueBox(
+    value = HTML(paste0(
+      '<div style="display: flex; align-items: center; justify-content: center; gap: 10px;">',
+        '<div style="display: flex; align-items: center;">',
+          '<img src="https://flagcdn.com/w40/cn.png" width="30" height="24" style="margin-right: 6px;" />',
+          '<span style="font-weight: bold; font-size: 13px;">CNY</span>',
+        '</div>',
+        '<div style="font-size: 20px; font-weight: bold;">¥ ', round(ult_cny, 2), '</div>',
+        '<i class="fa fa-arrow-down" style="font-size: 20px; font-weight: bold; color: white; position: relative; top: -8px;"></i>',
+      '</div>'
+    )),
+    subtitle = NULL,
+    color = "red"
+  )
+}
+```
+
+## Row {height70%}
+
+### Column {.tabset}
+
+```{r}
+#| title: EUR 
+  
+df_eur %>%
+  arrange(desc(Fecha)) %>%     # Como queremos es un DT con datos del mas reciente al mas antiguo
+  head(30) %>%                 # aplicamos arrange y despues identificamos que solo queremos los
+  datatable(options = list(    # primeros 10
+    autoWidth = TRUE,
+    pageLength = 30
+  ))
+```
+
+```{r}
+#| title: USD
+
+df_usd %>%
+  arrange(desc(Fecha)) %>%     # Como queremos es un DT con datos del mas reciente al mas antiguo
+  head(30) %>%                 # aplicamos arrange y despues identificamos que solo queremos los
+  datatable(options = list(    # primeros 10
+    autoWidth = TRUE,
+    pageLength = 30
+  ))
+
+```
+
+```{r}
+#| title: COP
+
+df_cop %>%
+  arrange(desc(Fecha)) %>%     # Como queremos es un DT con datos del mas reciente al mas antiguo
+  head(30) %>%                 # aplicamos arrange y despues identificamos que solo queremos los
+  datatable(options = list(    # primeros 10
+    autoWidth = TRUE,
+    pageLength = 30
+  ))
+
+```
+
+```{r}
+#| title: BRL
+
+df_brl %>%
+  arrange(desc(Fecha)) %>%     # Como queremos es un DT con datos del mas reciente al mas antiguo
+  head(30) %>%                 # aplicamos arrange y despues identificamos que solo queremos los
+  datatable(options = list(    # primeros 10
+    autoWidth = TRUE,
+    pageLength = 30
+  ))
+
+```
+
+```{r}
+#| title: CNY
+
+df_cny %>%
+  arrange(desc(Fecha)) %>%     # Como queremos es un DT con datos del mas reciente al mas antiguo
+  head(30) %>%                 # aplicamos arrange y despues identificamos que solo queremos los
+  datatable(options = list(    # primeros 10
+    autoWidth = TRUE,
+    pageLength = 30
+  ))
+
+```
+### Column {.tabset}
+
+```{r}
+#| title: EUR
+
+df_eur %>%
+  plot_ly(
+    x = ~Fecha, 
+    y= ~Compra_Bs, 
+    type = "scatter",               # Tipo de gráfico
+    mode = "lines",                 # Líneas continuas (sin puntos)
+    name = "COMPRA"              # Etiqueta en leyenda
+  )%>%
+   add_trace(y = ~Venta_Bs, name = "VENTA") %>%              # Serie Venta
+  
+  # Personalización del layout:
+  layout(
+    title = list(text = "Tasa de Cambio del Euro", y = 1),  # Título (posición ajustada)
+    
+    # Eje Y:
+    yaxis = list(
+      title = "EUR/BS",                 # Etiqueta del eje
+      tickformat = ",.0f",              # Formato: números enteros (ej. 60)
+      hoverformat = ",.1f",             # Tooltip: 1 decimal (ej. 60.5)
+      fixedrange = FALSE                # Permite zoom manual
+    ),
+    
+    # Eje X:
+    xaxis = list(
+      title = "",                       # Sin título (se entiende por las fechas)
+      hoverformat = "%b-%y",           # Formato tooltip: "Sep-23"
+      
+      # Rango inicial: últimos ~8.5 meses (260 días antes de la fecha máxima)
+      range = c(
+        as.numeric(max(df_eur$Fecha) - 260) * 8.64e7,  # Conversión a milisegundos
+        as.numeric(max(df_eur$Fecha) + 15) * 8.64e7    # +15 días de margen
+      ),
+      
+      # Selector de rangos temporales:
+      rangeselector = list(
+        buttons = list(
+          list(count = 3, label = "3 M", step = "month", stepmode = "backward"),
+          list(count = 6, label = "6 M", step = "month", stepmode = "backward"),
+          list(count = 1, label = "1 Año", step = "year", stepmode = "backward"),
+          list(count = 2, label = "2 Años", step = "year", stepmode = "backward"),
+          list(count = 1, label = "YTD", step = "year", stepmode = "todate"),  # Año actual
+          list(label = "Todo", step = "all")  # Resetear vista
+        )
+      ),
+      
+      # Slider inferior para navegación:
+      rangeslider = list(type = "date")  
+    ))   
+
+```
+
+```{r}
+#| title: USD
+
+df_usd %>%
+  plot_ly(
+    x = ~Fecha, 
+    y= ~Compra_Bs, 
+    type = "scatter",               # Tipo de gráfico
+    mode = "lines",                 # Líneas continuas (sin puntos)
+    name = "COMPRA"              # Etiqueta en leyenda
+  )%>%
+   add_trace(y = ~Venta_Bs, name = "VENTA") %>%              # Serie Venta
+  
+  # Personalización del layout:
+  layout(
+    title = list(text = "Tasa de Cambio del Dolar", y = 1),  # Título (posición ajustada)
+    
+    # Eje Y:
+    yaxis = list(
+      title = " USD/BS",                 # Etiqueta del eje
+      tickformat = ",.0f",              # Formato: números enteros (ej. 60)
+      hoverformat = ",.1f",             # Tooltip: 1 decimal (ej. 60.5)
+      fixedrange = FALSE                # Permite zoom manual
+    ),
+    
+    # Eje X:
+    xaxis = list(
+      title = "",                       # Sin título (se entiende por las fechas)
+      hoverformat = "%b-%y",           # Formato tooltip: "Sep-23"
+      
+      # Rango inicial: últimos ~8.5 meses (260 días antes de la fecha máxima)
+      range = c(
+        as.numeric(max(df_usd$Fecha) - 260) * 8.64e7,  # Conversión a milisegundos
+        as.numeric(max(df_usd$Fecha) + 15) * 8.64e7    # +15 días de margen
+      ),
+      
+      # Selector de rangos temporales:
+      rangeselector = list(
+        buttons = list(
+          list(count = 3, label = "3 M", step = "month", stepmode = "backward"),
+          list(count = 6, label = "6 M", step = "month", stepmode = "backward"),
+          list(count = 1, label = "1 Año", step = "year", stepmode = "backward"),
+          list(count = 2, label = "2 Años", step = "year", stepmode = "backward"),
+          list(count = 1, label = "YTD", step = "year", stepmode = "todate"),  # Año actual
+          list(label = "Todo", step = "all")  # Resetear vista
+        )
+      ),
+      
+      # Slider inferior para navegación:
+      rangeslider = list(type = "date")  
+    ))  
+```
+
+```{r}
+#| title: COP
+
+df_cop %>%
+  plot_ly(
+    x = ~Fecha, 
+    y= ~Compra_Bs, 
+    type = "scatter",               # Tipo de gráfico
+    mode = "lines",                 # Líneas continuas (sin puntos)
+    name = "COMPRA"              # Etiqueta en leyenda
+  )%>%
+   add_trace(y = ~Venta_Bs, name = "VENTA")  %>%              # Serie Venta
+  
+  # Personalización del layout:
+  layout(
+    title = list(text = "Tasa de Cambio del Peso Colombiano", y = 1),  # Título (posición ajustada)
+    
+    # Eje Y:
+    yaxis = list(
+      title = " COP/BS",                 # Etiqueta del eje
+      tickformat = ",.0f",              # Formato: números enteros (ej. 60)
+      hoverformat = ",.1f",             # Tooltip: 1 decimal (ej. 60.5)
+      fixedrange = FALSE                # Permite zoom manual
+    ),
+    
+    # Eje X:
+    xaxis = list(
+      title = "",                       # Sin título (se entiende por las fechas)
+      hoverformat = "%b-%y",           # Formato tooltip: "Sep-23"
+      
+      # Rango inicial: últimos ~8.5 meses (260 días antes de la fecha máxima)
+      range = c(
+        as.numeric(max(df_cop$Fecha) - 260) * 8.64e7,  # Conversión a milisegundos
+        as.numeric(max(df_cop$Fecha) + 15) * 8.64e7    # +15 días de margen
+      ),
+      
+      # Selector de rangos temporales:
+      rangeselector = list(
+        buttons = list(
+          list(count = 3, label = "3 M", step = "month", stepmode = "backward"),
+          list(count = 6, label = "6 M", step = "month", stepmode = "backward"),
+          list(count = 1, label = "1 Año", step = "year", stepmode = "backward"),
+          list(count = 2, label = "2 Años", step = "year", stepmode = "backward"),
+          list(count = 1, label = "YTD", step = "year", stepmode = "todate"),  # Año actual
+          list(label = "Todo", step = "all")  # Resetear vista
+        )
+      ),
+      
+      # Slider inferior para navegación:
+      rangeslider = list(type = "date")  
+    ))      
+```
+
+```{r}
+#| title: BRL
+
+df_brl %>%
+  plot_ly(
+    x = ~Fecha, 
+    y= ~Compra_Bs, 
+    type = "scatter",               # Tipo de gráfico
+    mode = "lines",                 # Líneas continuas (sin puntos)
+    name = "COMPRA"              # Etiqueta en leyenda
+  )%>%
+   add_trace(y = ~Venta_Bs, name = "VENTA") %>%              # Serie Venta
+  
+  # Personalización del layout:
+  layout(
+    title = list(text = "Tasa de Cambio del Real Brasileño", y = 1),  # Título (posición ajustada)
+    
+    # Eje Y:
+    yaxis = list(
+      title = " BRL/BS",                 # Etiqueta del eje
+      tickformat = ",.0f",              # Formato: números enteros (ej. 60)
+      hoverformat = ",.1f",             # Tooltip: 1 decimal (ej. 60.5)
+      fixedrange = FALSE                # Permite zoom manual
+    ),
+    
+    # Eje X:
+    xaxis = list(
+      title = "",                       # Sin título (se entiende por las fechas)
+      hoverformat = "%b-%y",           # Formato tooltip: "Sep-23"
+      
+      # Rango inicial: últimos ~8.5 meses (260 días antes de la fecha máxima)
+      range = c(
+        as.numeric(max(df_brl$Fecha) - 260) * 8.64e7,  # Conversión a milisegundos
+        as.numeric(max(df_brl$Fecha) + 15) * 8.64e7    # +15 días de margen
+      ),
+      
+      # Selector de rangos temporales:
+      rangeselector = list(
+        buttons = list(
+          list(count = 3, label = "3 M", step = "month", stepmode = "backward"),
+          list(count = 6, label = "6 M", step = "month", stepmode = "backward"),
+          list(count = 1, label = "1 Año", step = "year", stepmode = "backward"),
+          list(count = 2, label = "2 Años", step = "year", stepmode = "backward"),
+          list(count = 1, label = "YTD", step = "year", stepmode = "todate"),  # Año actual
+          list(label = "Todo", step = "all")  # Resetear vista
+        )
+      ),
+      
+      # Slider inferior para navegación:
+      rangeslider = list(type = "date")  
+    ))       
+```
+
+```{r}
+#| title: CNY
+df_cny %>%
+  plot_ly(
+    x = ~Fecha, 
+    y= ~Compra_Bs, 
+    type = "scatter",               # Tipo de gráfico
+    mode = "lines",                 # Líneas continuas (sin puntos)
+    name = "COMPRA"              # Etiqueta en leyenda
+  )%>%
+   add_trace(y = ~Venta_Bs, name = "VENTA") %>%              # Serie Venta
+  
+  # Personalización del layout:
+  layout(
+    title = list(text = "Tasa de Cambio del Yuan", y = 1),  # Título (posición ajustada)
+    
+    # Eje Y:
+    yaxis = list(
+      title = " CNY/BS",                 # Etiqueta del eje
+      tickformat = ",.0f",              # Formato: números enteros (ej. 60)
+      hoverformat = ",.1f",             # Tooltip: 1 decimal (ej. 60.5)
+      fixedrange = FALSE                # Permite zoom manual
+    ),
+    
+    # Eje X:
+    xaxis = list(
+      title = "",                       # Sin título (se entiende por las fechas)
+      hoverformat = "%b-%y",           # Formato tooltip: "Sep-23"
+      
+      # Rango inicial: últimos ~8.5 meses (260 días antes de la fecha máxima)
+      range = c(
+        as.numeric(max(df_cny$Fecha) - 260) * 8.64e7,  # Conversión a milisegundos
+        as.numeric(max(df_cny$Fecha) + 15) * 8.64e7    # +15 días de margen
+      ),
+      
+      # Selector de rangos temporales:
+      rangeselector = list(
+        buttons = list(
+          list(count = 3, label = "3 M", step = "month", stepmode = "backward"),
+          list(count = 6, label = "6 M", step = "month", stepmode = "backward"),
+          list(count = 1, label = "1 Año", step = "year", stepmode = "backward"),
+          list(count = 2, label = "2 Años", step = "year", stepmode = "backward"),
+          list(count = 1, label = "YTD", step = "year", stepmode = "todate"),  # Año actual
+          list(label = "Todo", step = "all")  # Resetear vista
+        )
+      ),
+      
+      # Slider inferior para navegación:
+      rangeslider = list(type = "date")  
+    ))    
+```
+# Acerca
+
+Como estudiantes de Economía en la Universidad Central de Venezuela, hemos desarrollado un dashboard donde se visualiza la tasa de cambio oficial de diversas monedas: euro (EUR), dólar estadounidense (USD), yuan chino (CNY), peso colombiano (COP) y real brasileño (BRL), publicadas por el Banco Central de Venezuela (BCV).
+
+Nuestra motivación surge de la necesidad de contar con una herramienta accesible y actualizada  que facilite a los estudiantes el análisis comparativo de las fluctuaciones cambiarias en un contexto económico tan dinámico como el venezolano. Lo ideal es que exista una moderada  toma de decisiones respecto a las tendencias macroeconómicas clave.
+
+El equipo está conformado por:
+- Arnaldo Di Remiggio
+- Diego Pérez
+- Gustavo Moreno
+- José Suárez
+- Raúl Cardozo
+
