@@ -4,7 +4,7 @@ format:
   dashboard:
     logo: https://flagcdn.com/w320/ve.png
     nav-buttons: [icon: github, href: "https://github.com/Tipo-de-Cambio-R4DS/Trabajo-final-R"]
-page-navigation: tabs
+
 ---
 # Indicadores Principales
 ```{r}
